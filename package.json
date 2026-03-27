@@ -1,8 +1,12 @@
 {
   "name": "vscode-web-buildtools",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLI tools for cloning, patching, installing, and compiling a web build of VS Code",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/x-botlab/vscode-web-buildtools.git"
+  },
   "keywords": [
     "vscode",
     "cli",

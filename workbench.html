@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="/out/vs/workbench/workbench.web.main.internal.css"
+    />
+  </head>
+  <body style="margin: 0; overflow: hidden">
+    <script src="/out/vs/loader.js"></script>
+    <script>
+      require.config({ baseUrl: `${window.location.origin}/out` });
+    </script>
+    <script src="/out/nls.messages.js"></script>
+    <script src="/out/vs/workbench/workbench.web.main.js"></script>
+    <script>
+      // const ch = new MessageChannel();
+      // ch.port2.onmessage = (event) => {
+      //     if (event.data.port) {
+      //         console.log("Got port to extension:", event.data);
+      //     }
+      // };
+      require(["vs/workbench/workbench.web.main"], function (wb) {
+        const config = {
+          // messagePorts: new Map([["progrium.apptron-system", ch.port1]]),
+          // productConfiguration: {
+          //     extensionEnabledApiProposals: {"progrium.apptron-system": ["ipc"]}
+          // },
+          locale: "zh-cn",
+          productConfiguration: {
+            nameShort: "Code OSS",
+            nameLong: "Code OSS",
+            extensionsGallery: {
+              serviceUrl: "https://open-vsx.org/vscode/gallery",
+              itemUrl: "https://open-vsx.org/vscode/item",
+              resourceUrlTemplate:
+                "https://open-vsx.org/vscode/unpkg/{publisher}/{name}/{version}/{path}",
+              extensionUrlTemplate:
+                "https://open-vsx.org/vscode/gallery/{publisher}/{name}/latest",
+            },
+          },
+          configurationDefaults: {
+            "workbench.secondarySideBar.defaultVisibility": "hidden",
+            "workbench.statusBar.visible": true,
+            "workbench.layoutControl.enabled": false,
+            "window.commandCenter": false,
+            "workbench.startupEditor": "none",
+            // "workbench.activityBar.location": "hidden",
+            "workbench.tips.enabled": false,
+            "workbench.welcomePage.walkthroughs.openOnInstall": false,
+          },
+          windowIndicator: {
+            label: "零板",
+            tooltip: "零板工作台",
+          },
+          initialColorTheme: {
+            themeType: "dark",
+          },
+          developmentOptions: {
+            logLevel: 0,
+          },
+          additionalBuiltinExtensions: [
+          ],
+          folderUri: { scheme: "your-fs", path: "/" },
+        };
+
+        wb.create(window.document.body, {
+          ...config,
+          workspaceProvider: {
+            trusted: true,
+            workspace: { folderUri: wb.URI.revive(config.folderUri) },
+            async open(workspace, options) {
+              console.log("openFolder requested", workspace);
+              return true;
+            },
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

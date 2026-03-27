@@ -1,0 +1,38 @@
+{
+  "name": "vscode-web-buildtools",
+  "version": "0.1.0",
+  "description": "CLI tools for cloning, patching, installing, and compiling a web build of VS Code",
+  "license": "MIT",
+  "keywords": [
+    "vscode",
+    "cli",
+    "build",
+    "web"
+  ],
+  "packageManager": "yarn@4.13.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "vsc-web-build": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "vite build && node ./scripts/copy-workbench.mjs",
+    "cli": "yarn node dist/cli.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "yarn typecheck",
+    "prepack": "yarn build"
+  },
+  "dependencies": {
+    "commander": "^14.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2",
+    "vite": "^7.1.7"
+  }
+}

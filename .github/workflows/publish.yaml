@@ -16,8 +16,9 @@ jobs:
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v6
         with:
-          node-version: '20.x'
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm install -g corepack
       - run: yarn
+      # https://gist.github.com/jaywcjlove/a178278521a6f72c74525d3f1d9c4bf9
       - run: npm publish

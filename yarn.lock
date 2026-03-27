@@ -1187,7 +1187,7 @@ __metadata:
     typescript: "npm:^6.0.2"
     vite: "npm:^7.1.7"
   bin:
-    vsc-web-build: ./dist/cli.js
+    vsc-web-build: dist/cli.js
   languageName: unknown
   linkType: soft
 

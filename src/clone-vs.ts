@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 const VSCodeRepoUrl = `https://github.com/microsoft/vscode.git`;
+const VSCodeLocRepoUrl = `https://github.com/microsoft/vscode-loc.git`
 
 export const cloneVSCodeRepo = (repoPath: string, version: string): void => {
   // Ensure the target directory exists, automatically create it if it doesn't
@@ -51,6 +52,27 @@ export const cloneLocalVSCodeRepo = (sourcePath: string, targetPath: string): vo
     
   } catch (error) {
     console.error('Error cloning local VS Code repository:', error);
+    throw error;
+  }
+}
+
+
+export const cloneVSCodeLocRepo = (repoPath: string, version: string): void => {
+  // Ensure the target directory exists, automatically create it if it doesn't
+  const fullRepoPath = path.resolve(repoPath);
+  try {
+    fs.mkdirSync(fullRepoPath, { recursive: true });
+  } catch (error) {
+    console.error('Error creating target directory:', error);
+    throw error;
+  }
+
+  try {
+    console.log(`Cloning VS Code Localization repository to ${repoPath}...`);
+    execFileSync('git', ['clone', '--depth', '1', '--branch', version, VSCodeLocRepoUrl, fullRepoPath], { stdio: 'inherit' });
+    console.log('VS Code Localization repository cloned successfully.');
+  } catch (error) {
+    console.error('Error cloning VS Code Localization repository:', error);
     throw error;
   }
 }

@@ -6,17 +6,6 @@ Chinese version: [README.zh-CN.md](./README.zh-CN.md)
 
 It turns common repository setup, patch handling, and build steps into commands so you do not need to repeat them manually.
 
-## Overview
-
-The CLI covers the main tasks needed for a custom VS Code web build:
-
-- clone a specific VS Code version
-- create a separate patched working copy
-- apply an existing patch set
-- generate patch files from your local changes
-- install dependencies in the patched checkout
-- run the web build pipeline
-
 ## Install
 
 Install the package globally so you can call the CLI directly:
@@ -39,21 +28,40 @@ For long-term use, global installation is the simplest option. You can also use 
 - [Git](https://git-scm.com/)
 - [npm](https://www.npmjs.com/)
 
-## About Patches
+## Typical Workflow
 
-This CLI treats patches as the portable form of your custom changes.
+```bash
+vsc-web-build clone --version 1.113.0
+vsc-web-build apply-patches
+vsc-web-build install
+vsc-web-build compile
+```
 
-A patch file records the difference between a clean upstream checkout and the changes you want to keep. This makes it easier to:
+If you changed the patched checkout and want to regenerate patch files:
 
-- reapply the same customizations to a fresh VS Code checkout
-- share your changes with other people or environments
-- keep your modifications separate from the upstream source tree
+```bash
+vsc-web-build make-patches
+```
 
-In the default workflow, patch files are stored under `vsc-work/patches`.
+If you already have an existing patch set and want to rebuild from scratch:
 
-Use `apply-patches` when you already have a patch set and want to apply it onto a fresh patched checkout.
+```bash
+vsc-web-build clone --version 1.113.0
+vsc-web-build apply-patches
+vsc-web-build install
+vsc-web-build compile
+```
 
-Use `make-patches` when you have modified the patched checkout and want to export those committed changes back into patch files.
+## Overview
+
+The CLI covers the main tasks needed for a custom VS Code web build:
+
+- clone a specific VS Code version
+- create a separate patched working copy
+- apply an existing patch set
+- generate patch files from your local changes
+- install dependencies in the patched checkout
+- run the web build pipeline
 
 ## Main Commands
 
@@ -125,29 +133,21 @@ Run the VS Code web build process.
 vsc-web-build compile
 ```
 
-## Typical Workflow
+## About Patches
 
-```bash
-vsc-web-build clone --version 1.113.0
-vsc-web-build apply-patches
-vsc-web-build install
-vsc-web-build compile
-```
+This CLI treats patches as the portable form of your custom changes.
 
-If you changed the patched checkout and want to regenerate patch files:
+A patch file records the difference between a clean upstream checkout and the changes you want to keep. This makes it easier to:
 
-```bash
-vsc-web-build make-patches
-```
+- reapply the same customizations to a fresh VS Code checkout
+- share your changes with other people or environments
+- keep your modifications separate from the upstream source tree
 
-If you already have an existing patch set and want to rebuild from scratch:
+In the default workflow, patch files are stored under `vsc-work/patches`.
 
-```bash
-vsc-web-build clone --version 1.113.0
-vsc-web-build apply-patches
-vsc-web-build install
-vsc-web-build compile
-```
+Use `apply-patches` when you already have a patch set and want to apply it onto a fresh patched checkout.
+
+Use `make-patches` when you have modified the patched checkout and want to export those committed changes back into patch files.
 
 ## Work Directory
 
@@ -158,6 +158,42 @@ vsc-web-build clone --dir D:/work/vscode-web --version 1.113.0
 ```
 
 The CLI creates and uses working folders under that directory for the upstream checkout, patched checkout, patch files, and build output.
+
+## Generating NLS (Localization) Files
+
+To generate localization (NLS) resource files, follow these steps:
+
+1. **Prepare Translation Files**  
+   You can find translation resources at: https://github.com/microsoft/vscode-loc/tree/main/i18n/vscode-language-pack-zh-hans/translations/main.i18n.json
+   
+   Place your localization JSON files in the `vsc-work/nls/` directory, for example `zh-cn.json`, with the following format:
+
+   ```json
+   {
+     "contents": {
+       "module1": { "key1": "Translated Content 1", ... },
+       ...
+     }
+   }
+   ```
+
+2. **Compile First**  
+   Run the web build command to ensure `nls.keys.json` and `nls.messages.json` are generated in the `vscode-web/out` directory:
+
+   ```bash
+   vsc-web-build compile
+   ```
+
+3. **Generate NLS Output**  
+   Run:
+
+   ```bash
+   vsc-web-build make-nls
+   ```
+
+   This will generate corresponding localized JS files in `nls-out/{locale}/nls.messages.js` for each `{locale}.json` in the `nls/` directory.
+
+> If prompted that `nls.keys.json` or `nls.messages.json` is not found, please run `vsc-web-build compile` first.
 
 ## Local Development
 

@@ -1,6 +1,6 @@
 {
   "name": "vscode-web-buildtools",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "CLI tools for cloning, patching, installing, and compiling a web build of VS Code",
   "license": "MIT",
   "repository": {
